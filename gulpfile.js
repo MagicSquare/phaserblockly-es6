@@ -22,6 +22,7 @@ var BLOCKLY_PATH = './node_modules/blockly-pre-release/';
 var LIB_PATH = './lib/';
 var BUILD_PATH = './build';
 var SCRIPTS_PATH = BUILD_PATH + '/scripts';
+var MEDIA_PATH = BUILD_PATH + '/media';
 var STYLES_PATH = BUILD_PATH + '/styles';
 var SOURCE_PATH = './src';
 var STATIC_PATH = './static';
@@ -178,6 +179,15 @@ function copyBlockly() {
 }
 
 /**
+ * Copies required Blockly media files from the './node_modules/blockly-pre-release' folder into the './build/lib' folder.
+ * This way you can call 'npm update', get the lastest Blockly version and use it on your project with ease.
+ */
+function copyBlocklyMedia() {
+    return gulp.src([BLOCKLY_PATH + '/media/**/*'])
+        .pipe(gulp.dest(MEDIA_PATH + '/blockly'));
+}
+
+/**
  * Copies lib folder into the './build/scripts' folder.
  */
 function copyLib() {
@@ -196,7 +206,7 @@ function copyLib() {
  * SHOULD NOT EXIST
  */
 function copySrcFake() {
-    var srcList = ['bug_blocks.js', 'workspace.js'];
+    var srcList = ['bug_blocks.js'];
 
     srcList = srcList.map(function (file) {
         return SOURCE_PATH + '/' + file;
@@ -271,7 +281,8 @@ gulp.task('copyBootstrapStyles', ['copyBootstrapScripts'], copyBootstrapStyles);
 gulp.task('copyJQuery', ['copyBootstrapStyles'], copyJQuery);
 gulp.task('copyAcorn', ['copyJQuery'], copyAcorn);
 gulp.task('copyBlockly', ['copyAcorn'], copyBlockly);
-gulp.task('copyLib', ['copyBlockly'], copyLib);
+gulp.task('copyBlocklyMedia', ['copyBlockly'], copyBlocklyMedia);
+gulp.task('copyLib', ['copyBlocklyMedia'], copyLib);
 gulp.task('copySrcFake', ['copyLib'], copySrcFake);
 gulp.task('build', ['copySrcFake'], build);
 gulp.task('fastBuild', build);

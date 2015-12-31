@@ -123,7 +123,7 @@ class GlassMarbles2State extends Phaser.State {
         this.m_Rocks.body.clearShapes();
         this.m_Rocks.body.loadPolygon('sprite_physics', 'glassmarbles_01');
 
-        for (i = 0; i < aSpritesPhysics.length; i++) {
+        for (let i = 0; i < aSpritesPhysics.length; i++) {
             aSpritesPhysics[i].body.static = true;
         }
 
@@ -169,7 +169,7 @@ class GlassMarbles2State extends Phaser.State {
                 if (!this.game.ms_OnBlocklyUpdate.go(this)) {
                     this.game.ms_OnBlocklyUpdate = null;
 
-                    this.game.ms_GameUpdateAutomate.nextStep(); // TODO how to access automate/workspace ?
+                    this.game.ms_GameUpdateAutomate.nextStep();
                 }
             }
         }

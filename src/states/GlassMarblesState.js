@@ -114,7 +114,7 @@ class GlassMarblesState extends Phaser.State {
             if (!this.game.ms_OnBlocklyUpdate.go(this)) {
                 this.game.ms_OnBlocklyUpdate = null;
 
-                this.game.ms_GameUpdateAutomate.nextStep();// TODO how to access automate/workspace ?
+                this.game.ms_GameUpdateAutomate.nextStep();
             }
         }
     }
