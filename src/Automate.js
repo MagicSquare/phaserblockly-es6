@@ -1,73 +1,6 @@
-/** A automate in this context execute a step and the game has to ask for next
- *    instruction.
- *    @class
- *    @constructor
- *
- *    @param {object} [inPointerAcces]  An object to set and get an Instruction
- *                                      pointer.
- *    @see bug_block.js
- *
- *        Example :
- *            ~~~{.js}*
- *            {
-*				get: function(){ return ms_OnBlocklyUpdate; }
-*				set: function(inInstruction){ ms_OnBlocklyUpdate = inInstruction; }
-*			}
- *            ~~~
- *
- *    @param {string} [inBlocklyBoardId]  The blockly target, the whiteboard to
- *           place the blocks.
- *
- *        Example    :
- *            ~~~{.html}
- *            <div class="tab-pane active" id="blocklyGame">
- *                <div id="blocklyGameMenu" style="height: 400px; width:100%; ">
- *                    <div style="float:right">
- *                        <button id="buildandrunButton">Build and run</button>
- *                        <button id="buildButton">Build</button>
- *                        <button id="stepButton" disabled="disabled">Step</button>
- *                        <button id="resetButton">Reset stage</button>
- *                    </div>
- *                </div>
- *            </div>
- *            ~~~
- *
- *            The inBlocklyElementId is ""blocklyGameMenu"
- *
- *    @param {string} [inBlocklyToolBoxId] The xml tool box id.
- *
- *        Example:
- *            ~~~{.xml}
- *            <xml id="gametoolbox" style="display: none">
- *                <block type="bug_move_left"></block>
- *                <block type="bug_move_right"></block>
- *                <block type="bug_jump"></block>
- *                <block type="bug_wait"></block>
- *                <block type="bug_controls_loop"></block>
- *            </xml>
- *            ~~~
- *
- *            The inBlocklyToolBoxId is "gametoolbox"
- *
- *    @param {string} [inBlocklyConsoleId] The console area element id. If it's
- *           empty the area don't be use.
- *
- *        Example:
- *            ~~~{.html}
- *                <div class="tab-pane" style="height: 400px; width:100%;" id="blocklyGameCode">
- *                    <textarea id="consoleTextarea" rows="5" cols="50"></textarea>
- *                </div>
- *            ~~~
- *
- *            The inBlocklyConsoleId is "consoleTextarea"
- *
- *    @param {string} [inStepButtonId] The step button id to run the program step
- *                                     by step. Can be empty.
- *
- */
 class Automate {
-    constructor(inPointerAcces, inBlocklyBoardId, inBlocklyToolBoxId, inBlocklyConsoleId, inStepButtonId) {
-        this.m_PointerAcces = inPointerAcces;
+    constructor(inBlockInstructions, inBlocklyBoardId, inBlocklyToolBoxId, inBlocklyConsoleId, inStepButtonId) {
+        this.m_blockInstructions = inBlockInstructions;
         this.m_BlocklyConsoleId = inBlocklyConsoleId;
         this.m_StepButtonId = inStepButtonId;
 
@@ -99,7 +32,7 @@ class Automate {
         //try
         {
             if (this.m_Interpreter) {
-                while (!this.m_Interpreter.paused_ && this.m_Interpreter.step() && !this.m_PointerAcces.get()) {
+                while (!this.m_Interpreter.paused_ && this.m_Interpreter.step() && !this.m_blockInstructions.isEmpty()) {
                 }
             }
         }
@@ -158,8 +91,7 @@ class Automate {
         Blockly.JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
         Blockly.JavaScript.addReservedWords('highlightBlock');
 
-        this.ms_CounterStep = 0;
-        this.m_PointerAcces.set(null);
+        this.m_blockInstructions.clear();
 
         let aCode = Blockly.JavaScript.workspaceToCode(this.m_WorkSpace);
 
@@ -176,7 +108,7 @@ class Automate {
     }
 
     stepClick() {
-        if (this.m_Interpreter && !this.m_PointerAcces.get()) {
+        if (this.m_Interpreter && !this.m_blockInstructions.isEmpty()) {
             //try
             //{
             this.nextStep();

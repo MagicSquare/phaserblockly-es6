@@ -202,21 +202,6 @@ function copyLib() {
 }
 
 /**
- * Copies src folder into the './build/scripts' folder.
- * SHOULD NOT EXIST
- */
-function copySrcFake() {
-    var srcList = ['bug_blocks.js'];
-
-    srcList = srcList.map(function (file) {
-        return SOURCE_PATH + '/' + file;
-    });
-
-    return gulp.src(srcList)
-        .pipe(gulp.dest(SCRIPTS_PATH));
-}
-
-/**
  * Transforms ES2015 code into ES5 code.
  * Optionally: Creates a sourcemap file 'game.js.map' for debugging.
  *
@@ -283,8 +268,7 @@ gulp.task('copyAcorn', ['copyJQuery'], copyAcorn);
 gulp.task('copyBlockly', ['copyAcorn'], copyBlockly);
 gulp.task('copyBlocklyMedia', ['copyBlockly'], copyBlocklyMedia);
 gulp.task('copyLib', ['copyBlocklyMedia'], copyLib);
-gulp.task('copySrcFake', ['copyLib'], copySrcFake);
-gulp.task('build', ['copySrcFake'], build);
+gulp.task('build', ['copyLib'], build);
 gulp.task('fastBuild', build);
 gulp.task('serve', ['build'], serve);
 gulp.task('watch-js', ['fastBuild'], browserSync.reload); // Rebuilds and reloads the project when executed.

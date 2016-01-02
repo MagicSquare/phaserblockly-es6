@@ -6,15 +6,16 @@ import GlassMarblesState from './states/GlassMarblesState';
 import GlassMarbles2State from './states/GlassMarbles2State';
 import LevelEditorTest01State from './states/LevelEditorTest01State';
 import Automate from './Automate';
+import BlockInstructions from './BlockInstructions';
 
 class Game extends Phaser.Game {
 
     constructor() {
         super(800, 600, Phaser.AUTO, 'phaserGame', null);
-        this.ms_OnBlocklyUpdate = new BlockInstructionEmpty();
-        this.ms_OnBlocklyLevelEditorResources = new BlockInstructionEmpty();
-        this.ms_OnBlocklyLevelEditorCreate = new BlockInstructionEmpty();
-        this.ms_OnBlocklyLevelEditorUdpate = new BlockInstructionEmpty();
+        this.ms_OnBlocklyUpdate = new BlockInstructions();
+        this.ms_OnBlocklyLevelEditorResources = new BlockInstructions();
+        this.ms_OnBlocklyLevelEditorCreate = new BlockInstructions();
+        this.ms_OnBlocklyLevelEditorUdpate = new BlockInstructions();
         this.ms_GameUpdateAutomate = null;
         this.ms_EditorLevelResourcesAutomate = null;
         this.ms_EditorLevelCreateAutomate = null;
@@ -39,60 +40,25 @@ class Game extends Phaser.Game {
     }
 
     initAutomate() {
-        let aGameUpdatePointerAcces = {
-            get() {
-                return this.ms_OnBlocklyUpdate;
-            },
-            set(inInstruction) {
-                this.ms_OnBlocklyUpdate = inInstruction;
-            }
-        };
-        this.ms_GameUpdateAutomate = new Automate(aGameUpdatePointerAcces,
+        this.ms_GameUpdateAutomate = new Automate(this.ms_OnBlocklyUpdate,
             'blocklyGameMenu',
             'gametoolbox',
             'consoleTextarea',
             'stepButton');
 
-        let aEditorLevelResourcesPointerAcces =
-        {
-            get() {
-                return this.ms_OnBlocklyLevelEditorResources;
-            },
-            set: function (inInstruction) {
-                this.ms_OnBlocklyLevelEditorResources = inInstruction;
-            }
-        };
-        this.ms_EditorLevelResourcesAutomate = new Automate(aEditorLevelResourcesPointerAcces,
+        this.ms_EditorLevelResourcesAutomate = new Automate(this.ms_OnBlocklyLevelEditorResources,
             'blocklyLevelEditorResourcesMenu',
             'leveleditorresourcestoolbox',
             '',
             '');
 
-        let aEditorLevelCreatePointerAcces =
-        {
-            get() {
-                return this.ms_OnBlocklyLevelEditorCreate;
-            },
-            set(inInstruction) {
-                this.ms_OnBlocklyLevelEditorCreate = inInstruction;
-            }
-        };
-        this.ms_EditorLevelCreateAutomate = new Automate(aEditorLevelCreatePointerAcces,
+        this.ms_EditorLevelCreateAutomate = new Automate(this.ms_OnBlocklyLevelEditorCreate,
             'blocklyLevelEditorCreateMenu',
             'leveleditorcreatetoolbox',
             '',
             '');
 
-        let aEditorLevelUpdatePointerAcces =
-        {
-            get() {
-                return this.ms_OnBlocklyLevelEditorUdpate;
-            },
-            set(inInstruction) {
-                this.ms_OnBlocklyLevelEditorUdpate = inInstruction;
-            }
-        };
-        this.ms_EditorLevelUpdateAutomate = new Automate(aEditorLevelUpdatePointerAcces,
+        this.ms_EditorLevelUpdateAutomate = new Automate(this.ms_OnBlocklyLevelEditorUdpate,
             'blocklyLevelEditorUpdateMenu',
             'leveleditorupdatetoolbox',
             '',
@@ -109,8 +75,7 @@ class Game extends Phaser.Game {
         });
 
         $("#resetButton").click(() => {
-            ms_CounterStep = 0;
-            this.ms_OnBlocklyUpdate = null;
+            this.ms_OnBlocklyUpdate.clear();
             this.state.start(this.state.current);
         });
 
@@ -136,11 +101,9 @@ class Game extends Phaser.Game {
         });
 
         $("#resetlevelButton").click(() => {
-            ms_CounterStep = 0;
-
-            this.ms_OnBlocklyLevelEditorResources = null;
-            this.ms_OnBlocklyLevelEditorCreate = null;
-            this.ms_OnBlocklyLevelEditorUdpate = null;
+            this.ms_OnBlocklyLevelEditorResources.clear();
+            this.ms_OnBlocklyLevelEditorCreate.clear();
+            this.ms_OnBlocklyLevelEditorUdpate.clear();
 
             this.state.start(this.state.current);
         });
