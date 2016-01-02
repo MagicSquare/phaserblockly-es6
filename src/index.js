@@ -132,7 +132,7 @@ class Game extends Phaser.Game {
             //this.ms_EditorLevelUpdateAutomate.parseCode();
             //this.ms_EditorLevelUpdateAutomate.nextStep();
 
-            this.state.start(ms_Phaser.m_Game.state.current);
+            this.state.start(this.state.current);
         });
 
         $("#resetlevelButton").click(() => {
