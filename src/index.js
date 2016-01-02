@@ -100,6 +100,8 @@ class Game extends Phaser.Game {
     }
 
     initWorkspace() {
+        $('#tabs').tab();
+
         $("#buildandrunButton").click(() => {
             this.ms_GameUpdateAutomate.parseCode();
 
