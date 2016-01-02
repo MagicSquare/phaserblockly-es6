@@ -117,4 +117,5 @@ class Game extends Phaser.Game {
     };
 }
 
-new Game();
+// TODO export correctly the game to be accessed in BlockInstructions
+window.theGame = new Game();

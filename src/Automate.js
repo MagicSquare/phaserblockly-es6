@@ -28,20 +28,6 @@ class Automate {
         }
     }
 
-    nextStep() {
-        //try
-        {
-            if (this.m_Interpreter) {
-                while (!this.m_Interpreter.paused_ && this.m_Interpreter.step() && !this.m_blockInstructions.isEmpty()) {
-                }
-            }
-        }
-        //catch( aError )
-        //{
-        //	alert( aError );
-        //}
-    }
-
     highlightBlock(id) {
         this.m_WorkSpace.highlightBlock(id);
         this.m_HighlightPause = true;
@@ -94,6 +80,7 @@ class Automate {
         this.m_blockInstructions.clear();
 
         let aCode = Blockly.JavaScript.workspaceToCode(this.m_WorkSpace);
+        console.log(aCode);
 
         this.m_Interpreter = new Interpreter(aCode, this.initApi(this.m_WorkSpace));
 
@@ -105,6 +92,20 @@ class Automate {
 
         this.m_WorkSpace.traceOn(true);
         this.m_WorkSpace.highlightBlock(null);
+    }
+
+    nextStep() {
+        //try
+        {
+            if (this.m_Interpreter) {
+                while (!this.m_Interpreter.paused_ && this.m_Interpreter.step() && !this.m_blockInstructions.isEmpty()) {
+                }
+            }
+        }
+        //catch( aError )
+        //{
+        //	alert( aError );
+        //}
     }
 
     stepClick() {

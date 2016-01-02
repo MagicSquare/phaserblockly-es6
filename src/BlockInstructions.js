@@ -1,8 +1,5 @@
 class BlockInstructions {
     constructor() {
-        /** Step counter to naming the highlight tag
-         *    @remarks Before to run the instructions reinit this one.
-         */
         this.ms_CounterStep = 0;
 
         this.initBlocks();
@@ -17,33 +14,14 @@ class BlockInstructions {
         // TODO clear instructions
     }
 
-    /** To show step by step mod */
     getEndBlockCode() {
-        let aCounter = this.ms_CounterStep;
-        this.ms_CounterStep++;
-        return 'highlightBlock( ' + aCounter + ' );';
+        return 'highlightBlock( ' + (this.ms_CounterStep++) + ' );';
     }
 
-    /**    Each update the state class has to call the go function.
-     *
-     *    @param {object} [inState] - use that to access at the state variables.
-     *
-     *    @method BlockInstructionEmpty#go
-     */
     go(inState) {
         return false;
     }
 
-    /** Template str basic instruction
-     *
-     *    @param {string[]} [inMembers] - str members arrays
-     *
-     *   @param {string} [inStrFuncGo] string function definition: Has to return false to close
-     *                                  the instruction
-     *
-     *    @remarks got to the blockfactory @link https://blockly-demo.appspot.com/static/demos/blockfactory/index.html
-     *             to create your own block.
-     */
     getStrBlockInstruction(inMembers, inStrFuncGo) {
         let aResult = "";
 
@@ -65,28 +43,26 @@ class BlockInstructions {
         return aResult;
     }
 
-    /** Create a basic class instructions
-     *
-     *    @param {string[]} [inMembers array] of members example : ["m_Count=10"]
-     *
-     *    @param {string} [inStrFuncGo] go str function example :
-     *
-     *          aGoFunc =  "if( 0 < this.m_Count )"
-     *          aGoFunc += "{"
-    *		   aGoFunc +=		"inState.m_Player.body.velocity.y = -350;"
-    *		   aGoFunc +=      "this.m_Count--;"
-    *		   aGoFunc +=		"return true;" // It's not the instruction end. We have to continue.
-    *		   aGoFunc += "}"
-     *          aGoFunc += "else"
-     *          aGoFunc += "{"
-    *		   aGoFunc +=		"return false;" // Instruction end.
-    *		   aGoFunc += "}"
-     */
     createBasicFunction(inMembers, inStrFuncGo) {
-        const aGoFunc = 'ms_OnBlocklyUpdate = new ' + this.getStrBlockInstruction(inMembers, inStrFuncGo) + ';';
+        const aGoFunc = 'var ms_OnBlocklyUpdate = new ' + this.getStrBlockInstruction(inMembers, inStrFuncGo) + ';';
 
         let aResult = '';
 
+        aResult += 'eval( "' + aGoFunc + '" );';
+        aResult += this.getEndBlockCode(); //Step by Step
+
+        //eval( aResult ); //Debug to see if the code works
+
+        return aResult;
+    }
+
+    addGoFunc(inStrFuncGo) {
+        let aGoFunc = "theGame.ms_OnBlocklyUpdate.go = function( inState )";
+        aGoFunc += "{";
+        aGoFunc += inStrFuncGo;
+        aGoFunc += "};";
+
+        let aResult = '';
         aResult += 'eval( "' + aGoFunc + '" );';
         aResult += this.getEndBlockCode(); //Step by Step
 
@@ -151,7 +127,8 @@ class BlockInstructions {
     }
 
     initBlocks() {
-        this.initBlockBugMoveLeft();
+        this.initTest();
+        //this.initBlockBugMoveLeft();
         this.initBlockBugMoveRight();
         this.initBlockBugJump();
         this.initBlockBugWait();
@@ -163,6 +140,35 @@ class BlockInstructions {
         this.initBlockMoveToGreen();
         this.initBlockMoveToRed();
         this.initBlockIfColorName();
+    }
+
+    initTest() {
+        Blockly.Blocks['bug_move_left'] = {
+            init: function () {
+                this.appendDummyInput()
+                    .appendField("Left")
+                    .appendField(new Blockly.FieldTextInput("1"), "cycle")
+                    .appendField("cycle(s)");
+                this.setInputsInline(true);
+                this.setPreviousStatement(true);
+                this.setNextStatement(true);
+                this.setColour(0);
+                this.setTooltip('');
+                this.setHelpUrl('http://www.example.com/');
+            }
+        };
+
+        Blockly.JavaScript['bug_move_left'] = (inBlock) => {
+            let aGoFunc = "";
+            aGoFunc += "inState.m_Player.body.velocity.x = 0;"; //  Reset the players velocity (movement)
+
+            aGoFunc += "inState.m_Player.body.velocity.x = -150;"; //  Move to the right
+            aGoFunc += "inState.m_Player.animations.play('left');";
+            aGoFunc += "this.m_Count--;";
+            aGoFunc += "return true;";
+
+            return this.addGoFunc(aGoFunc);
+        };
     }
 
     initBlockBugMoveLeft() {
