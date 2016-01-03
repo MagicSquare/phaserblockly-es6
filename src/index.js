@@ -115,6 +115,12 @@ class Game extends Phaser.Game {
         }
         return this.m_CurrentStage;
     };
+
+    goToState(inStateName) {
+        return () => {
+            this.state.start(inStateName);
+        };
+    }
 }
 
 // TODO export correctly the game to be accessed in BlockInstructions

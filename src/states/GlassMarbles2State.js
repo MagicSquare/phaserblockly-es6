@@ -157,7 +157,7 @@ class GlassMarbles2State extends Phaser.State {
 
         this.m_GameOverText.visible = false;
 
-        let aGoBackButton = this.game.add.button(this.game.width, this.game.height, "backtotree", this.getGoToState(TreeState.getStateName()), this);
+        let aGoBackButton = this.game.add.button(this.game.width, this.game.height, "backtotree", this.game.goToState(TreeState.getStateName()), this);
         aGoBackButton.anchor.setTo(1.0, 1.0);
 
         this.game.add.sprite(0, 0, 'firstplan');
@@ -190,12 +190,6 @@ class GlassMarbles2State extends Phaser.State {
             aDebugGroups(this.m_RedPath, this.game);
             aDebugGroups(this.m_Balls, this.game);
         }
-    }
-
-    getGoToState(inStateName) {
-        return () => {
-            this.game.state.start(inStateName);
-        };
     }
 
     isNotGameOver() {

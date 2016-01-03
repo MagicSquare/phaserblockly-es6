@@ -32,7 +32,7 @@ class LevelEditorTest01State extends Phaser.State {
             this.game.ms_OnBlocklyLevelEditorCreate = null;
         }
 
-        let aGoBackButton = this.game.add.button(this.game.width, this.game.height, "backtotree", this.getGoToState(TreeState.getStateName()), this);
+        let aGoBackButton = this.game.add.button(this.game.width, this.game.height, "backtotree", this.game.goToState(TreeState.getStateName()), this);
         aGoBackButton.anchor.setTo(1.0, 1.0);
     }
 
@@ -56,12 +56,6 @@ class LevelEditorTest01State extends Phaser.State {
                 this.game.ms_GameUpdateAutomate.nextStep();
             }
         }
-    }
-
-    getGoToState(inStateName) {
-        return () => {
-            this.game.state.start(inStateName);
-        };
     }
 
     static getStateName() {

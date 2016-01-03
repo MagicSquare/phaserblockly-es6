@@ -88,7 +88,7 @@ class PhaserDemo1State extends Phaser.State {
 
         this.m_ScoreText = this.game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
 
-        let aGoBackButton = this.game.add.button(this.game.width, this.game.height, "backtotree", this.getGoToState(TreeState.getStateName()), this);
+        let aGoBackButton = this.game.add.button(this.game.width, this.game.height, "backtotree", this.game.goToState(TreeState.getStateName()), this);
         aGoBackButton.anchor.setTo(1.0, 1.0);
     }
 
@@ -105,12 +105,6 @@ class PhaserDemo1State extends Phaser.State {
                 this.game.ms_GameUpdateAutomate.nextStep();
             }
         }
-    }
-
-    getGoToState(inStateName) {
-        return () => {
-            this.game.state.start(inStateName);
-        };
     }
 
     collectStar(player, star) {

@@ -105,7 +105,7 @@ class GlassMarblesState extends Phaser.State {
 
         this.m_ScoreText = this.game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#fff' });
 
-        var aGoBackButton = this.game.add.button(this.game.width, this.game.height, "backtotree", this.getGoToState(TreeState.getStateName()), this);
+        var aGoBackButton = this.game.add.button(this.game.width, this.game.height, "backtotree", this.game.goToState(TreeState.getStateName()), this);
         aGoBackButton.anchor.setTo(1.0, 1.0);
     }
 
@@ -121,12 +121,6 @@ class GlassMarblesState extends Phaser.State {
 
     render() {
         //this.game.debug.text( "Group size: " + this.m_Balls.total, 32, 32 );
-    }
-
-    getGoToState(inStateName) {
-        return () => {
-            this.game.state.start(inStateName);
-        };
     }
 
     collectBall(inPlayer, inBall) {
