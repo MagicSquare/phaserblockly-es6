@@ -51,7 +51,7 @@ class LevelEditorTest01State extends Phaser.State {
          */
         if (this.game.ms_OnBlocklyUpdate) {
             if (!this.game.ms_OnBlocklyUpdate.go(this)) {
-                this.game.ms_OnBlocklyUpdate = null;
+                this.game.ms_OnBlocklyUpdate.clear();
 
                 this.game.ms_GameUpdateAutomate.nextStep();
             }

@@ -1,16 +1,17 @@
 class BlockInstructions {
     constructor() {
         this.ms_CounterStep = 0;
-
+        this.ms_empty = true;
         this.initBlocks();
     }
 
     isEmpty() {
-        return false; // TODO instructions are empty ?
+        return this.ms_empty; 
     }
 
     clear() {
         this.ms_CounterStep = 0;
+        this.ms_empty = true;
         // TODO clear instructions
     }
 
@@ -22,47 +23,20 @@ class BlockInstructions {
         return false;
     }
 
-    getStrBlockInstruction(inMembers, inStrFuncGo) {
-        let aResult = "";
-
-        aResult += "function()";
-        aResult += "{";
+    createBasicFunction(inMembers, inStrFuncGo) {
+        let aGoFunc = "";
+        aGoFunc += "theGame.ms_OnBlocklyUpdate.ms_empty=false;";
 
         for (let i = 0; i < inMembers.length; i++) {
-            aResult += "this." + inMembers[i] + ";"
+            aGoFunc += "theGame.ms_OnBlocklyUpdate." + inMembers[i] + ";"
         }
 
-        aResult += "this.go = function( inState )";
-        aResult += "{";
-        aResult += inStrFuncGo;
-        aResult += "};";
-        aResult += "}";
-
-        //eval(aResult);
-
-        return aResult;
-    }
-
-    createBasicFunction(inMembers, inStrFuncGo) {
-        const aGoFunc = 'var ms_OnBlocklyUpdate = new ' + this.getStrBlockInstruction(inMembers, inStrFuncGo) + ';';
-
-        let aResult = '';
-
-        aResult += 'eval( "' + aGoFunc + '" );';
-        aResult += this.getEndBlockCode(); //Step by Step
-
-        //eval( aResult ); //Debug to see if the code works
-
-        return aResult;
-    }
-
-    addGoFunc(inStrFuncGo) {
-        let aGoFunc = "theGame.ms_OnBlocklyUpdate.go = function( inState )";
+        aGoFunc += "theGame.ms_OnBlocklyUpdate.go = function( inState )";
         aGoFunc += "{";
         aGoFunc += inStrFuncGo;
         aGoFunc += "};";
 
-        let aResult = '';
+        let aResult = "";
         aResult += 'eval( "' + aGoFunc + '" );';
         aResult += this.getEndBlockCode(); //Step by Step
 
@@ -127,8 +101,7 @@ class BlockInstructions {
     }
 
     initBlocks() {
-        this.initTest();
-        //this.initBlockBugMoveLeft();
+        this.initBlockBugMoveLeft();
         this.initBlockBugMoveRight();
         this.initBlockBugJump();
         this.initBlockBugWait();
@@ -140,35 +113,6 @@ class BlockInstructions {
         this.initBlockMoveToGreen();
         this.initBlockMoveToRed();
         this.initBlockIfColorName();
-    }
-
-    initTest() {
-        Blockly.Blocks['bug_move_left'] = {
-            init: function () {
-                this.appendDummyInput()
-                    .appendField("Left")
-                    .appendField(new Blockly.FieldTextInput("1"), "cycle")
-                    .appendField("cycle(s)");
-                this.setInputsInline(true);
-                this.setPreviousStatement(true);
-                this.setNextStatement(true);
-                this.setColour(0);
-                this.setTooltip('');
-                this.setHelpUrl('http://www.example.com/');
-            }
-        };
-
-        Blockly.JavaScript['bug_move_left'] = (inBlock) => {
-            let aGoFunc = "";
-            aGoFunc += "inState.m_Player.body.velocity.x = 0;"; //  Reset the players velocity (movement)
-
-            aGoFunc += "inState.m_Player.body.velocity.x = -150;"; //  Move to the right
-            aGoFunc += "inState.m_Player.animations.play('left');";
-            aGoFunc += "this.m_Count--;";
-            aGoFunc += "return true;";
-
-            return this.addGoFunc(aGoFunc);
-        };
     }
 
     initBlockBugMoveLeft() {
@@ -359,12 +303,12 @@ class BlockInstructions {
             }
         };
 
-        Blockly.JavaScript['bug_controls_loop'] = function (inBlock) {
+        Blockly.JavaScript['bug_controls_loop'] = (inBlock) => {
             var aTextCount = inBlock.getFieldValue('count');
             var aStatementsName = Blockly.JavaScript.statementToCode(inBlock, 'innerCode');
 
             var aCode = 'for( var i=0; i < ' + aTextCount + '; i++ ) {' + aStatementsName + '}';
-            aCode += getEndBlockCode();
+            aCode += this.getEndBlockCode();
             return aCode;
         };
     }
@@ -565,7 +509,7 @@ class BlockInstructions {
                 aColorVarName = 'm_GreenOverLap';
             }
 
-            const aStrCondition = 'eval( "ms_Phaser.getCurrentStage().' + aColorVarName + '" )';
+            const aStrCondition = 'eval( "theGame.getCurrentStage().' + aColorVarName + '" )';
             //var aStrCondition = 'eval( "glassmarbles2.'+ aColorVarName + '" )' ;
 
             //alert( eval( aStrCondition ) );

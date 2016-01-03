@@ -80,7 +80,6 @@ class Automate {
         this.m_blockInstructions.clear();
 
         let aCode = Blockly.JavaScript.workspaceToCode(this.m_WorkSpace);
-        console.log(aCode);
 
         this.m_Interpreter = new Interpreter(aCode, this.initApi(this.m_WorkSpace));
 
