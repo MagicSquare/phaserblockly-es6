@@ -3,7 +3,7 @@ import TreeState from './TreeState';
 class PreloaderState extends Phaser.State {
 
     preload() {
-        var loadingBar = this.add.sprite(160, 240, "loading");
+        let loadingBar = this.add.sprite(160, 240, "loading");
 
         loadingBar.anchor.setTo(0.5, 0.5);
 

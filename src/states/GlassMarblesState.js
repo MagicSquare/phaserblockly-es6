@@ -105,7 +105,7 @@ class GlassMarblesState extends Phaser.State {
 
         this.m_ScoreText = this.game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#fff' });
 
-        var aGoBackButton = this.game.add.button(this.game.width, this.game.height, "backtotree", this.game.goToState(TreeState.getStateName()), this);
+        let aGoBackButton = this.game.add.button(this.game.width, this.game.height, "backtotree", this.game.goToState(TreeState.getStateName()), this);
         aGoBackButton.anchor.setTo(1.0, 1.0);
     }
 
@@ -148,7 +148,7 @@ class GlassMarblesState extends Phaser.State {
         if (this.m_Balls.total < this.m_MaxBallsLenght) {
             this.m_WaitToAddBallCounter = 0; // TODO remove if unused outside class
 
-            var aBall = this.m_Balls.create(this.game.width * 0.5 + this.game.rnd.integerInRange(-70, -10), 10, 'balls');
+            let aBall = this.m_Balls.create(this.game.width * 0.5 + this.game.rnd.integerInRange(-70, -10), 10, 'balls');
 
             aBall.body.setCircle(9);
             aBall.body.fixedRotation = true;

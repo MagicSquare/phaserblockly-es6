@@ -20,10 +20,10 @@ class TreeState extends Phaser.State {
     }
 
     addState(x, y, inStateName, inTitle) {
-        var aPlayButton = this.game.add.button(x, y, "spot", this.game.goToState(inStateName), this);
+        let aPlayButton = this.game.add.button(x, y, "spot", this.game.goToState(inStateName), this);
         aPlayButton.anchor.setTo(0.5, 1.0);
 
-        var aText = this.game.add.text(x, y - aPlayButton.height * 0.5, inTitle, { fontSize: '10px', fill: '#000' });
+        let aText = this.game.add.text(x, y - aPlayButton.height * 0.5, inTitle, { fontSize: '10px', fill: '#000' });
         aText.anchor.setTo(0.5, 0.5);
     }
 

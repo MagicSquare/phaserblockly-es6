@@ -12,7 +12,6 @@ class BlockInstructions {
     clear() {
         this.ms_CounterStep = 0;
         this.ms_empty = true;
-        // TODO clear instructions
     }
 
     getEndBlockCode() {
@@ -118,7 +117,7 @@ class BlockInstructions {
     initBlockBugMoveLeft() {
         /** Move Left @see index.html toolbox */
         Blockly.Blocks['bug_move_left'] = {
-            init: function () {
+            init: function() {
                 this.appendDummyInput()
                     .appendField("Left")
                     .appendField(new Blockly.FieldTextInput("1"), "cycle")
